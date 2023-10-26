@@ -19,7 +19,7 @@ const db = new Pool({
   database: process.env.POSTGRES_DATABASE,
   password: process.env.POSTGRES_PASSWORD,
   port: process.env.POSTGRES_PORT,
-  ssl: true,
+  //   ssl: true,
 });
 
 // Connecting to database
@@ -36,8 +36,13 @@ app.get("/", (req, res) => {
 
 app.get("/entries", (req, res) => {
   db.query(
-    `SELECT * FROM entries`
+    `select e.id as entry_id, e.title, p.person_full_name as recommended_by, med.medium_type, moo.mood_type from entries e 
+      inner join media med on (e.medium_id = med.id)
+      inner join moods_entries me on (e.id = me.entry_id)
+      inner join moods moo on (moo.id = me.mood_id)
+      inner join people p on (p.id = e.person_id);`
   )
+
     .then((result) => res.json(result.rows))
     .catch((error) => {
       console.log(error.message);
@@ -47,8 +52,8 @@ app.get("/entries", (req, res) => {
 
 // This endpoint is used to get all the people who made recommendations
 
-app.get("/people", (req, res) => {
-  db.query(`SELECT * FROM people;`)
+app.get("/recommenders", (req, res) => {
+  db.query(`SELECT distinct person_id FROM entries;`)
     .then((result) => res.json(result.rows))
     .catch((error) => {
       console.log(error.message);
@@ -59,7 +64,7 @@ app.get("/people", (req, res) => {
 // This endpoint is used to get all the moods
 
 app.get("/moods", (req, res) => {
-  db.query(`SELECT * FROM moods;`)
+  db.query(`SELECT * FROM moods_entries;`)
     .then((result) => res.json(result.rows))
     .catch((error) => {
       console.log(error.message);
@@ -67,10 +72,10 @@ app.get("/moods", (req, res) => {
     });
 });
 
-// This endpoint is used to get all the mediums
+// This endpoint is used to get all the media
 
-app.get("/mediums", (req, res) => {
-  db.query(`SELECT * FROM mediums;`)
+app.get("/media", (req, res) => {
+  db.query(`SELECT * FROM media;`)
     .then((result) => res.json(result.rows))
     .catch((error) => {
       console.log(error.message);
