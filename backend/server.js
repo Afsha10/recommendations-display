@@ -19,7 +19,7 @@ const db = new Pool({
   database: process.env.POSTGRES_DATABASE,
   password: process.env.POSTGRES_PASSWORD,
   port: process.env.POSTGRES_PORT,
-  //   ssl: true,
+    ssl: true,
 });
 
 // Connecting to database
@@ -78,9 +78,19 @@ app.get("/moods/:entryId", (req, res) => {
   const { entryId } = req.params;
 
   db.query(
-    `select e.id as entry_id, e.title, moo.mood_type from entries e 
-        inner join moods_entries me on (e.id = me.entry_id)
-        inner join moods moo on (moo.id = me.mood_id) where entry_id = $1;`,
+    `select 
+      e.id as entry_id, 
+      e.title, 
+      p.person_full_name as recommended_by, 
+      med.medium_type, 
+      moo.mood_type 
+    from 
+    entries e 
+      inner join media med on (e.medium_id = med.id)
+      inner join moods_entries me on (e.id = me.entry_id)
+      inner join moods moo on (moo.id = me.mood_id)
+      inner join people_entries pe on (pe.entry_id = e.id) 
+      inner join people p on (pe.person_id = p.id) where me.entry_id = $1;`,
     [entryId]
   )
     .then((result) => {
@@ -88,6 +98,8 @@ app.get("/moods/:entryId", (req, res) => {
         entry_id: result.rows[0].entry_id,
         title: result.rows[0].title,
         mood_types: result.rows.map((row) => row.mood_type),
+        recommender: result.rows.map((row) => row.recommended_by),
+        medium_type: result.rows.map((row) => row.medium_type),
       };
       res.json(moodsObject);
     })
