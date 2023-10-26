@@ -72,6 +72,31 @@ app.get("/moods", (req, res) => {
     });
 });
 
+// This endpoint is used to get all the moods based on entry_id or titles
+
+app.get("/moods/:entryId", (req, res) => {
+  const { entryId } = req.params;
+
+  db.query(
+    `select e.id as entry_id, e.title, moo.mood_type from entries e 
+        inner join moods_entries me on (e.id = me.entry_id)
+        inner join moods moo on (moo.id = me.mood_id) where entry_id = $1;`,
+    [entryId]
+  )
+    .then((result) => {
+      const moodsObject = {
+        entry_id: result.rows[0].entry_id,
+        title: result.rows[0].title,
+        mood_types: result.rows.map((row) => row.mood_type),
+      };
+      res.json(moodsObject);
+    })
+    .catch((error) => {
+      console.log(error.message);
+      res.status(500).send("Database Error");
+    });
+});
+
 // This endpoint is used to get all the media
 
 app.get("/media", (req, res) => {
