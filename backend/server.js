@@ -19,7 +19,7 @@ const db = new Pool({
   database: process.env.POSTGRES_DATABASE,
   password: process.env.POSTGRES_PASSWORD,
   port: process.env.POSTGRES_PORT,
-    ssl: true,
+  ssl: true,
 });
 
 // Connecting to database
@@ -36,11 +36,30 @@ app.get("/", (req, res) => {
 
 app.get("/entries", (req, res) => {
   db.query(
-    `select e.id as entry_id, e.title, p.person_full_name as recommended_by, med.medium_type, moo.mood_type from entries e 
-      inner join media med on (e.medium_id = med.id)
-      inner join moods_entries me on (e.id = me.entry_id)
-      inner join moods moo on (moo.id = me.mood_id)
-      inner join people p on (p.id = e.person_id);`
+    `SELECT
+      e.id AS entry_id,
+      e.title,
+      m.medium_type,
+      recommendations.recommended_by,
+      moods.mood_types
+    FROM entries e
+    INNER JOIN media m ON (e.medium_id = m.id)
+    LEFT JOIN (
+        SELECT
+          entry_id,
+          ARRAY_AGG(p.person_full_name) AS recommended_by
+        FROM people_entries pe
+        JOIN people p ON (pe.person_id = p.id)
+        GROUP BY entry_id
+    ) AS recommendations ON e.id = recommendations.entry_id
+    LEFT JOIN (
+        SELECT
+            entry_id,
+            ARRAY_AGG(moo.mood_type) AS mood_types
+        FROM moods_entries me
+        JOIN moods moo ON (me.mood_id = moo.id)
+        GROUP BY entry_id
+    ) AS moods ON e.id = moods.entry_id;`
   )
 
     .then((result) => res.json(result.rows))
@@ -72,25 +91,21 @@ app.get("/moods", (req, res) => {
     });
 });
 
-// This endpoint is used to get all the moods based on entry_id or titles
+// This endpoint is used to get all the moods based on entry_id or title/medium combination
 
 app.get("/moods/:entryId", (req, res) => {
   const { entryId } = req.params;
 
   db.query(
-    `select 
+    `SELECT 
       e.id as entry_id, 
       e.title, 
-      p.person_full_name as recommended_by, 
-      med.medium_type, 
       moo.mood_type 
-    from 
-    entries e 
-      inner join media med on (e.medium_id = med.id)
-      inner join moods_entries me on (e.id = me.entry_id)
-      inner join moods moo on (moo.id = me.mood_id)
-      inner join people_entries pe on (pe.entry_id = e.id) 
-      inner join people p on (pe.person_id = p.id) where me.entry_id = $1;`,
+    FROM 
+    entries e
+      INNER JOIN moods_entries me on (e.id = me.entry_id)
+      INNER JOIN moods moo on (moo.id = me.mood_id)
+      where me.entry_id = $1;`,
     [entryId]
   )
     .then((result) => {
@@ -98,8 +113,6 @@ app.get("/moods/:entryId", (req, res) => {
         entry_id: result.rows[0].entry_id,
         title: result.rows[0].title,
         mood_types: result.rows.map((row) => row.mood_type),
-        recommender: result.rows.map((row) => row.recommended_by),
-        medium_type: result.rows.map((row) => row.medium_type),
       };
       res.json(moodsObject);
     })
