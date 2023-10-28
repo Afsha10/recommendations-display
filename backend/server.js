@@ -37,29 +37,30 @@ app.get("/", (req, res) => {
 app.get("/entries", (req, res) => {
   db.query(
     `SELECT
-      e.id AS entry_id,
-      e.title,
-      m.medium_type,
+      entries.id AS entry_id,
+      entries.title,
+      media.medium_type,
       recommendations.recommended_by,
-      moods.mood_types
-    FROM entries e
-    INNER JOIN media m ON (e.medium_id = m.id)
+      newMoods.mood_types
+    FROM entries
+    INNER JOIN media ON (entries.medium_id = media.id)
     LEFT JOIN (
         SELECT
           entry_id,
-          ARRAY_AGG(p.person_full_name) AS recommended_by
-        FROM people_entries pe
-        JOIN people p ON (pe.person_id = p.id)
+          ARRAY_AGG(people.person_full_name) AS recommended_by
+        FROM people_entries
+        JOIN people ON (people_entries.person_id = people.id)
         GROUP BY entry_id
-    ) AS recommendations ON e.id = recommendations.entry_id
+    ) AS recommendations ON entries.id = recommendations.entry_id
     LEFT JOIN (
         SELECT
             entry_id,
-            ARRAY_AGG(moo.mood_type) AS mood_types
-        FROM moods_entries me
-        JOIN moods moo ON (me.mood_id = moo.id)
+            ARRAY_AGG(moods.mood_type) AS mood_types
+        FROM moods_entries
+        JOIN moods ON (moods_entries.mood_id = moods.id)
         GROUP BY entry_id
-    ) AS moods ON e.id = moods.entry_id;`
+    ) AS newMoods ON entries.id = newMoods.entry_id
+   ORDER BY entries.id;`
   )
 
     .then((result) => res.json(result.rows))
@@ -68,6 +69,48 @@ app.get("/entries", (req, res) => {
       res.status(500).send("Database Error");
     });
 });
+
+// This endpoint is used to filter entries by medium
+
+app.get("/entries/media/:mediumId", (req, res) => {
+  const mediumId = req.params.mediumId;
+  db.query(
+    `SELECT
+      entries.id AS entry_id,
+      entries.title,
+      media.medium_type,
+      recommendations.recommended_by,
+      newMoods.mood_types
+    FROM entries
+    INNER JOIN media ON (entries.medium_id = media.id)
+    LEFT JOIN (
+        SELECT
+          entry_id,
+          ARRAY_AGG(people.person_full_name) AS recommended_by
+        FROM people_entries
+        JOIN people ON (people_entries.person_id = people.id)
+        GROUP BY entry_id
+    ) AS recommendations ON entries.id = recommendations.entry_id
+    LEFT JOIN (
+        SELECT
+            entry_id,
+            ARRAY_AGG(moods.mood_type) AS mood_types
+        FROM moods_entries
+        JOIN moods ON (moods_entries.mood_id = moods.id)
+        GROUP BY entry_id
+    ) AS newMoods ON entries.id = newMoods.entry_id
+    WHERE media.id = $1
+    ORDER BY entries.id;`,
+    [mediumId]
+  )
+
+    .then((result) => res.json(result.rows))
+    .catch((error) => {
+      console.log(error.message);
+      res.status(500).send("Database Error");
+    });
+});
+
 
 // This endpoint is used to get all the people who made recommendations
 
@@ -105,7 +148,7 @@ app.get("/moods/:entryId", (req, res) => {
     entries e
       INNER JOIN moods_entries me on (e.id = me.entry_id)
       INNER JOIN moods moo on (moo.id = me.mood_id)
-      where me.entry_id = $1;`,
+      WHERE me.entry_id = $1;`,
     [entryId]
   )
     .then((result) => {
@@ -125,7 +168,33 @@ app.get("/moods/:entryId", (req, res) => {
 // This endpoint is used to get all the media
 
 app.get("/media", (req, res) => {
-  db.query(`SELECT * FROM media;`)
+  db.query(
+    `SELECT
+      entries.id AS entry_id,
+      entries.title,
+      media.medium_type,
+      recommendations.recommended_by,
+      newMoods.mood_types
+    FROM entries
+    INNER JOIN media ON (entries.medium_id = media.id)
+    LEFT JOIN (
+        SELECT
+          entry_id,
+          ARRAY_AGG(people.person_full_name) AS recommended_by
+        FROM people_entries
+        JOIN people ON (people_entries.person_id = people.id)
+        GROUP BY entry_id
+    ) AS recommendations ON entries.id = recommendations.entry_id
+    LEFT JOIN (
+        SELECT
+            entry_id,
+            ARRAY_AGG(moods.mood_type) AS mood_types
+        FROM moods_entries
+        JOIN moods ON (moods_entries.mood_id = moods.id)
+        GROUP BY entry_id
+    ) AS newMoods ON entries.id = newMoods.entry_id
+    ORDER BY media.id;`
+  )
     .then((result) => res.json(result.rows))
     .catch((error) => {
       console.log(error.message);
@@ -134,3 +203,4 @@ app.get("/media", (req, res) => {
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
