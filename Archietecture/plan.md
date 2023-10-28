@@ -28,3 +28,11 @@ I want my data to look like this:
 
 ]
 
+### Postgres Connection String
+
+When connecting DBeaver with ElephantSQL I needed to understand postgres connection string
+
+pfmirjab:kcvaD-dO3KhGT--5RwWIw7u45v30M-66@surus.db.elephantsql.com/pfmirjab
+postgres://username:password@hostname/databaseName
+
+
