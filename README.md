@@ -1,5 +1,9 @@
 # recommendations-tracker
 
+Backend: https://recommendations-tracker-backend.onrender.com/entries
+
+Frontend: https://recommendations-tracker.netlify.app/
+
 ## Business problem:
 People recommend things (books, TV shows, music etc). Sometimes we don't get around to trying them out for a while. We want a website to track those recommendations, and to help us pick things when we're in the right mood for them.
 
