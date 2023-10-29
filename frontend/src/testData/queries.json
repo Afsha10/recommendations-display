@@ -1,0 +1,85 @@
+[
+  {
+    "entry_id": 6,
+    "title": "Burglar Bill",
+    "medium_type": "Book",
+    "recommended_by": ["Lorentz Tulip"],
+    "mood_types": ["Adventure", "Fun"]
+  },
+  {
+    "entry_id": 10,
+    "title": "Lord Of The Rings",
+    "medium_type": "Book",
+    "recommended_by": ["Alisha Jasmine"],
+    "mood_types": ["Whimsical", "Romantic", "Inspirational", "Epic Fantasy"]
+  },
+  {
+    "entry_id": 3,
+    "title": "Atomic Habits",
+    "medium_type": "Book",
+    "recommended_by": ["Alexey Orchid"],
+    "mood_types": ["Inspirational"]
+  },
+  {
+    "entry_id": 11,
+    "title": "Lord Of The Rings",
+    "medium_type": "Movie / Film",
+    "recommended_by": ["Alisha Jasmine"],
+    "mood_types": ["Whimsical", "Romantic", "Inspirational", "Epic Fantasy"]
+  },
+  {
+    "entry_id": 5,
+    "title": "Inception",
+    "medium_type": "Movie / Film",
+    "recommended_by": ["Alisha Jasmine"],
+    "mood_types": ["Adventure", "Romantic", "Inspirational", "Sad"]
+  },
+  {
+    "entry_id": 8,
+    "title": "Forrest Gump",
+    "medium_type": "Movie / Film",
+    "recommended_by": ["Yulia Iris"],
+    "mood_types": [
+      "Happy / Joyful",
+      "Whimsical",
+      "Romantic",
+      "Inspirational",
+      "Personal growth"
+    ]
+  },
+  {
+    "entry_id": 9,
+    "title": "Interstellar",
+    "medium_type": "Movie / Film",
+    "recommended_by": ["Cathy Rose"],
+    "mood_types": ["Sad", "Adventure", "Inspirational"]
+  },
+  {
+    "entry_id": 1,
+    "title": "Frozen",
+    "medium_type": "Movie / Film",
+    "recommended_by": ["Alexey Orchid", "Daniel Lily"],
+    "mood_types": ["Whimsical", "Happy / Joyful"]
+  },
+  {
+    "entry_id": 4,
+    "title": "Kylie's Greatest Hits",
+    "medium_type": "Music",
+    "recommended_by": ["Cathy Rose"],
+    "mood_types": ["Happy / Joyful", "Romantic"]
+  },
+  {
+    "entry_id": 7,
+    "title": "Picasso at Tate Modern",
+    "medium_type": "Event",
+    "recommended_by": ["Cathy Rose"],
+    "mood_types": ["Inspirational"]
+  },
+  {
+    "entry_id": 2,
+    "title": "Halloween Party at Cath's",
+    "medium_type": "Event",
+    "recommended_by": ["Cathy Rose"],
+    "mood_types": ["Scary", "Adventure"]
+  }
+]
