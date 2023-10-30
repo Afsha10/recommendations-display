@@ -30,7 +30,7 @@ function NewEntriesForm({ entries, setEntries }) {
             setFormRecommendedBy("");
             setErrorMessage("");
           } else {
-            throw new Error("Error adding a recommendation")
+            throw new Error("Error adding a recommendation");
           }
         })
         .catch((error) => {

@@ -3,11 +3,13 @@ import RecommendationsDisplay from "./RecommendationsDisplay";
 
 function RecommendationsDisplayBox({ entries }) {
   return (
-    <div>
+    <div className=" bg-violet-300 flex flex-col">
       <h2 className="text-xl text-center font-bold">
         View all recommendations
       </h2>
-      <RecommendationsDisplay entries={entries} />
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4">
+        <RecommendationsDisplay entries={entries} />
+      </div>
     </div>
   );
 }
