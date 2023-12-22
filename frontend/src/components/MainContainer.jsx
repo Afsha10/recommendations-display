@@ -1,4 +1,4 @@
-import  React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import RecommendationsFilterBox from "./RecommendationsFilterBox";
 import RecommendationsDisplayBox from "./RecommendationsDisplayBox";
 import NewEntriesForm from "./NewEntriesForm";
@@ -17,7 +17,7 @@ function MainContainer() {
     retrieveData();
   }, []);
   return (
-    <div>
+    <div className="grow">
       <NewEntriesForm entries={entries} setEntries={setEntries} />
       <RecommendationsFilterBox />
       <RecommendationsDisplayBox entries={entries} />

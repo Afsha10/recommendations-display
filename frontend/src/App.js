@@ -4,7 +4,7 @@ import MainContainer from "./components/MainContainer";
 
 function App() {
   return (
-    <div className="bg-gradient-to-tl from-violet-300 via-fuchsia-200 to-violet-300">
+    <div className="flex flex-col min-h-screen bg-gradient-to-tl from-violet-300 via-fuchsia-200 to-violet-300">
       <Header />
       <MainContainer />
       <Footer />
