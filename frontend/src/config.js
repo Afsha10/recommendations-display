@@ -1,4 +1,4 @@
 export const baseUrl =
-  process.env.REACT_APP_IS_PRODUCTION === "true"
+  process.env.NODE_ENV === "production"
     ? "https://recommendations-tracker-backend.onrender.com"
     : "http://localhost:5000";

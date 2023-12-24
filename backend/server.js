@@ -3,7 +3,6 @@ const express = require("express");
 const { Pool } = require("pg");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -111,7 +110,6 @@ app.get("/entries/media/:mediumId", (req, res) => {
     });
 });
 
-
 // This endpoint is used to get all the people who made recommendations
 
 app.get("/recommenders", (req, res) => {
@@ -203,4 +201,3 @@ app.get("/media", (req, res) => {
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
-
