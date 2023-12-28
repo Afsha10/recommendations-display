@@ -46,7 +46,7 @@ function NewEntriesForm({ entries, setEntries }) {
   };
 
   return (
-    <div>
+    <div className="mx-4">
       <h2 className="text-xl text-center font-bold">
         Add a new recommendation
       </h2>
