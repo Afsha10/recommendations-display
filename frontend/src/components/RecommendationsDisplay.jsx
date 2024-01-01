@@ -1,9 +1,8 @@
 import { joinArrayWithAnd } from "../utils/joinArrayWithAnd";
 
 function RecommendationsDisplay({ entries }) {
-
   if (!entries.length) {
-    return "Loading ...";
+    return "Page loading soon... 😀 ";
   }
 
   return entries.map((entry) => {
