@@ -2,7 +2,7 @@
 
 ### If we were to create an object could we use a method or function to generate the value of a property like below
 
-```{
+````{
   entry_id: 1,
   title: "Frozen",
   mood_types: ["Happy / Joyful", "Whimsical"]
@@ -27,12 +27,4 @@ I want my data to look like this:
   },...
 
 ]
-
-### Postgres Connection String
-
-When connecting DBeaver with ElephantSQL I needed to understand postgres connection string
-
-pfmirjab:kcvaD-dO3KhGT--5RwWIw7u45v30M-66@surus.db.elephantsql.com/pfmirjab
-postgres://username:password@hostname/databaseName
-
-
+````
