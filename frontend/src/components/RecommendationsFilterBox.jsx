@@ -5,6 +5,7 @@ import axios from "axios";
 function RecommendationsFilterBox() {
   const [media, setMedia] = useState([]);
   const [moods, setMoods] = useState([]);
+  const [recommenders, setRecommenders] = useState([]);
   // const handleOnchange = () => {};
 
   useEffect(() => {
@@ -43,6 +44,24 @@ function RecommendationsFilterBox() {
     fetchMoods();
   }, []);
 
+  useEffect(() => {
+    const fetchRecommenders = async () => {
+      try {
+        const response = await axios.get(
+          "https://recommendations-tracker-backend.onrender.com/recommenders"
+        );
+        setRecommenders(
+          response.data.map((val) => {
+            return val.person_full_name;
+          })
+        );
+      } catch (error) {
+        console.log("error");
+      }
+    };
+    fetchRecommenders();
+  }, []);
+
   return (
     <div>
       <h2 className="text-xl text-center font-bold my-2">
@@ -58,6 +77,8 @@ function RecommendationsFilterBox() {
         />
         {/* mood filter drop down */}
         <FilterDropDown type="moods" values={moods} />
+        {/* recommender filter drop down */}
+        <FilterDropDown type="recommenders" values={recommenders} />
       </div>
     </div>
   );
