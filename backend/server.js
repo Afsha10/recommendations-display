@@ -121,15 +121,6 @@ app.get("/recommenders", (req, res) => {
     });
 });
 
-// app.get("/recommenders", (req, res) => {
-//   db.query(`SELECT distinct person_id FROM entries;`)
-//     .then((result) => res.json(result.rows))
-//     .catch((error) => {
-//       console.log(error.message);
-//       res.status(500).send("Database Error");
-//     });
-// });
-
 // This endpoint is used to get all the moods
 
 app.get("/moods", (req, res) => {
@@ -185,40 +176,5 @@ app.get("/media", (req, res) => {
       res.status(500).send("Database Error");
     });
 });
-
-// app.get("/media", (req, res) => {
-//   db.query(
-//     `SELECT
-//       entries.id AS entry_id,
-//       entries.title,
-//       media.medium_type,
-//       recommendations.recommended_by,
-//       newMoods.mood_types
-//     FROM entries
-//     INNER JOIN media ON (entries.medium_id = media.id)
-//     LEFT JOIN (
-//         SELECT
-//           entry_id,
-//           ARRAY_AGG(people.person_full_name) AS recommended_by
-//         FROM people_entries
-//         JOIN people ON (people_entries.person_id = people.id)
-//         GROUP BY entry_id
-//     ) AS recommendations ON entries.id = recommendations.entry_id
-//     LEFT JOIN (
-//         SELECT
-//             entry_id,
-//             ARRAY_AGG(moods.mood_type) AS mood_types
-//         FROM moods_entries
-//         JOIN moods ON (moods_entries.mood_id = moods.id)
-//         GROUP BY entry_id
-//     ) AS newMoods ON entries.id = newMoods.entry_id
-//     ORDER BY media.id;`
-//   )
-//     .then((result) => res.json(result.rows))
-//     .catch((error) => {
-//       console.log(error.message);
-//       res.status(500).send("Database Error");
-//     });
-// });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
